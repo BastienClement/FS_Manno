@@ -1,0 +1,5 @@
+## Interface: 60200
+## Title: |cff64b4ffFrom Scratch|r Mannoroth
+## OptionalDeps: LibStub, CallbackHandler-1.0, Ace3
+
+FS_Manno.lua
