@@ -24,10 +24,28 @@ function Gaze:OnInitialize()
 end
 
 local locked = false
+local wrath_locked = false
 function Gaze:COMBAT_LOG_EVENT_UNFILTERED(_, _, event, ...)
 	if event == "SPELL_AURA_APPLIED" then
 		local target, _, _, spell = select(7, ...)
-		if spell == 182006 and not locked then
+		if spell == 186362 and not wrath_locked then
+			wrath_locked = true
+			C_Timer.After(0.5, function()
+				wrath_locked = false
+				local sym = 1
+				for i = 1, 20 do
+					local unit = "raid" .. i
+					if UnitDebuff(unit, WRATH) then
+						if sym == 3 and ((UnitHealth("boss1") / UnitHealthMax("boss1")) < 0.35) then
+							SetRaidTarget(unit, 6)
+						else
+							SetRaidTarget(unit, sym)
+						end
+						sym = sym + 1
+					end
+				end
+			end)
+		elseif spell == 182006 and not locked then
 			locked = true
 			C_Timer.After(0.5, function()
 				locked = false
